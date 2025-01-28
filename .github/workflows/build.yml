@@ -1,22 +1,27 @@
 name: CI/CD Pipeline
 
 on:
-  pull_request:
+  push:
     branches: 
-      - master
+      - main
 
 jobs: 
   build: 
     runs-on: ubuntu-latest
     steps: 
+      # Step-1: checkout the code
       - uses: actions/checkout@v3
+      
+      # Step-2: Set up node.js environment
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20.17.0'
+          node-version: 'lts/*'
       
+      # Step-3: Install dependencies
       - name: Install dependencies
         run: npm install
 
+      # Step-4: Build the project
       - name: Run and build
         run: npm run build
