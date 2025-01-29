@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps: 
     - name: Check out repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Log in to docker hub
       uses: docker/login-action@v3
@@ -29,3 +29,15 @@ jobs:
     - name: verify Pushed Image
       run: docker pull ankitkrsh5595/reactapp:latest
 
+    - name: Deploy to EC2
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.EC2_HOST_ADDR }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_PRIVATE_KEY }}
+        script: |
+          sudo docker pull ankitkrsh5595/reactapp:latest
+          sudo docker stop web-app || true
+          sudo docker rm web-app || true
+          sudo docker system prune -af  # Clean up unused images/containers
+          sudo docker run -d --name web-app -p 5173:5173 ankitkrsh5595/reactapp:latest
