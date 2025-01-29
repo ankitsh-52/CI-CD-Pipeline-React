@@ -34,7 +34,7 @@ jobs:
       with:
         host: ${{ secrets.EC2_HOST_ADDR }}
         username: ${{ secrets.EC2_USER }}
-        key: ${{ secrets.EC2_PRIVATE_KEY }}
+        key: ${{ secrets.EC2_KEY }}
         script: |
           sudo docker pull ankitkrsh5595/reactapp:latest
           sudo docker stop web-app || true
